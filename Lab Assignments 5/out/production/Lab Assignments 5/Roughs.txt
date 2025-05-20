@@ -1,0 +1,48 @@
+public void info(){
+        System.out.println(playlist_title+ " has the following songs: ");
+        if(starting_song==null){
+            System.out.println("No songs in "+ playlist_title);
+        }
+        else{
+            int song_count=1;
+            Song current_song = starting_song;
+            while(current_song!=null){
+                System.out.println("Song "+ song_count);
+                current_song.songInfo();
+                current_song=current_song.next_song;
+                song_count++;
+            }
+        }
+    }
+public void addSong(Song a){
+        System.out.println(a.song_name+" added to the "+ playlist_title+".");
+        if(starting_song==null){
+            starting_song = a;
+        }
+        else{
+            Song current_song = starting_song;
+            while(current_song.next_song!=null){
+                current_song = current_song.next_song;
+            }
+            current_song.next_song=a;
+        }
+    }
+
+    Song current_song = starting_song;
+            boolean found = false;
+            int song_index = 0;
+            while(current_song!=null&&!current_song.song_name.equals(a)){
+                current_song=current_song.next_song;
+                song_index++;
+            }
+            if(current_song!=null&&current_song.song_name.equals(a)){
+                found = true;
+            }
+            if(found){
+                current_song=current_song.next_song;
+                System.out.println(a + "  deleted from "+playlist_title+".");
+                return;
+            }
+            else{
+                System.out.println(a+" not found in playlist "+playlist_title+".");
+            }

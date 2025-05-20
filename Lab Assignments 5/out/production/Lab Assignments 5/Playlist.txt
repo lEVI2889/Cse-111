@@ -1,0 +1,161 @@
+class Playlist {
+    String name;
+    Song head;
+
+    // Constructor
+    public Playlist(String name) {
+        this.name = name;
+        this.head = null;
+        System.out.println(name + " created.");
+    }
+
+    // Add song to the end of the playlist
+    public void addSong(Song song) {
+        if (head == null) {
+            head = song;
+        } else {
+            Song current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = song;
+        }
+        System.out.println(song.title + " added to " + name + ".");
+    }
+
+    // Overloaded addSong method to insert at a specific position
+    public void addSong(Song song, int index) {
+        if (index < 0) {
+            System.out.println("Cannot add song to Index " + index + ".");
+            return;
+        }
+
+        if (index == 0) {
+            song.next = head;
+            head = song;
+        } else {
+            Song current = head;
+            int count = 0;
+            while (current != null && count < index - 1) {
+                current = current.next;
+                count++;
+            }
+
+
+                System.out.println("Cannot add song to Index " + index + ".");
+                return;
+            }
+
+            song.next = current.next;
+            current.next = song;
+        }
+        System.out.println(song.title + " added to " + name + ".");
+    }
+
+    // Display playlist information
+    public void info() {
+        System.out.println(name + " has the following songs:");
+        if (head == null) {
+            System.out.println("No songs in " + name + ".");
+        } else {
+            Song current = head;
+            int count = 1;
+            while (current != null) {
+                System.out.println("Song-" + count);
+                current.songInfo();
+                current = current.next;
+                count++;
+            }
+        }
+    }
+
+    // Play a song by title
+    public void playSong(String title) {
+        Song current = head;
+        while (current != null) {
+            if (current.title.equals(title)) {
+                System.out.println("Playing " + title + " by " + current.artist + ".");
+                return;
+            }
+            current = current.next;
+        }
+        System.out.println(title + " not found in playlist " + name + ".");
+    }
+
+    // Play a song by index
+    public void playSong(int index) {
+        if (index < 0) {
+            System.out.println("Song at Index " + index + " not found in " + name + ".");
+            return;
+        }
+
+        Song current = head;
+        int count = 0;
+        while (current != null) {
+            if (count == index) {
+                System.out.println("Playing " + current.title + " by " + current.artist + ".");
+                return;
+            }
+            current = current.next;
+            count++;
+        }
+
+        System.out.println("Song at Index " + index + " not found in " + name + ".");
+    }
+
+    // Delete a song by title
+    public void deleteSong(String title) {
+        if (head == null) {
+            System.out.println(title + " not found in " + name + ".");
+            return;
+        }
+
+        if (head.title.equals(title)) {
+            head = head.next;
+            System.out.println(title + " deleted from " + name + ".");
+            return;
+        }
+
+        Song current = head;
+        while (current.next != null && !current.next.title.equals(title)) {
+            current = current.next;
+        }
+
+        if (current.next == null) {
+            System.out.println(title + " not found in " + name + ".");
+        } else {
+            current.next = current.next.next;
+            System.out.println(title + " deleted from " + name + ".");
+        }
+    }
+
+    // Count total songs in the playlist
+    public int totalSong() {
+        int count = 0;
+        Song current = head;
+        while (current != null) {
+            count++;
+            current = current.next;
+        }
+        return count;
+    }
+
+    // Merge another playlist into this playlist
+    public void merge(Playlist other) {
+        if (other.head == null) {
+            System.out.println("Nothing to merge.");
+            return;
+        }
+
+        if (head == null) {
+            head = other.head;
+        } else {
+            Song current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = other.head;
+        }
+        System.out.println("Merge Completed!");
+    }
+}

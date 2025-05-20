@@ -1,0 +1,158 @@
+//Song Class
+public class Song {
+    String song_name;
+    String artist;
+    int length;
+    Song next_song;
+    public Song(String a, String b, int n){
+        song_name = a;
+        artist = b;
+        length = n;
+        next_song = null;
+    }
+    public void songInfo(){
+        System.out.println("Title: "+ song_name);
+        System.out.println("Artist: "+artist);
+        System.out.println("Length: "+length+" minutes");
+
+    }
+}
+
+//Playlist Class
+public class Playlist {
+    String playlist_title;
+
+    Song starting_song;
+    String name;
+    //static int total_songs;
+
+    public Playlist(String a){
+        playlist_title = a;
+        System.out.println(playlist_title+" created");
+        name = playlist_title;
+    }
+    public void info(){
+        System.out.println(playlist_title+" has the following songs:");
+        if(starting_song==null){
+            System.out.println("No songs in " + playlist_title + ".");
+        }
+        else{
+            int song_count = 1;
+            Song current_song = starting_song;
+            while(current_song!=null){
+                System.out.println("Song " + song_count);
+                current_song.songInfo();
+                current_song=current_song.next_song;
+                song_count++;
+            }
+        }
+    }
+    public void addSong(Song a){
+        System.out.println(a.song_name+" added to First Playlist.");
+        if(starting_song==null){
+            starting_song = a;
+        }
+        else{
+            Song current_song = starting_song;
+            while(current_song.next_song!=null){
+                current_song=current_song.next_song;
+                /*ekhane amra current song take current
+                song er next song tay niye jacchi,
+                otao null na hoile again amra current song take change kore otar next song e niye jacchi*/
+            }
+            current_song.next_song = a;
+        }
+    }
+
+    public void addSong(Song a, int ind){
+        if(ind==0){
+            a.next_song = starting_song;
+            starting_song = a;
+            System.out.println(a.song_name + " added to First Playlist.");
+        }
+        else{
+            Song current_song = starting_song;
+            int ind_count = 0;
+            while(ind_count<ind-1&&current_song!=null){
+                current_song = current_song.next_song;
+                ind_count++;
+            }
+            if(current_song==null){
+                System.out.println("Cannot add song to Index "+ind+".");
+                return;
+            }
+            a.next_song = current_song.next_song;
+            current_song.next_song = a;
+            System.out.println(a.song_name + " added to First Playlist.");
+        }
+    }
+    public void playSong(String a){
+        Song current_song = starting_song;
+        boolean found = false;
+        while(current_song!=null&&!current_song.song_name.equals(a)){
+            current_song=current_song.next_song;
+        }
+        if(current_song!=null&&current_song.song_name.equals(a)){
+            found = true;
+        }
+        if(found){
+            System.out.println("Playing " + a + " by "+current_song.artist+".");
+        }
+        else{
+            System.out.println(a+" not found in playlist "+playlist_title+".");
+        }
+    }
+    public void playSong(int n){
+        Song current_song = starting_song;
+        int ind_count = 0;
+        while(current_song!=null&&ind_count<n){
+            current_song=current_song.next_song;
+            ind_count++;
+        }
+        if(current_song==null){
+            System.out.println("Song at Index " + n + " not found in " + playlist_title + ".");
+        }
+        else{
+            System.out.println("Playing " + current_song.song_name + " by "+current_song.artist+".");
+        }
+    }
+    public void deleteSong(String a){
+        if(starting_song.song_name.equals(a)){
+            starting_song=starting_song.next_song;
+            System.out.println(a + "  deleted from "+playlist_title+".");
+            return;
+        }
+        Song current_song = starting_song;
+        while(current_song.next_song!=null&&!current_song.next_song.song_name.equals(a)){
+            current_song=current_song.next_song;
+        }
+        if(current_song.next_song!=null&&current_song.next_song.song_name.equals(a)){
+            current_song.next_song=current_song.next_song.next_song;
+            System.out.println(a + "  deleted from "+playlist_title+".");
+            return;
+        }
+        if(current_song.next_song==null){
+            System.out.println(a+" not found in playlist "+playlist_title+".");
+            return;
+        }
+    }
+    public int totalSong(){
+        int total_song = 0;
+        Song current_song = starting_song;
+        while(current_song!=null){
+            current_song=current_song.next_song;
+            total_song++;
+        }
+        return total_song;
+    }
+    public void merge(Playlist a){
+        System.out.println("Merge Completed!");
+        Song current_song =starting_song;
+        while(current_song.next_song!=null){
+            current_song=current_song.next_song;
+        }
+        if(current_song.next_song==null){
+            current_song.next_song=a.starting_song;
+        }
+    }
+}
